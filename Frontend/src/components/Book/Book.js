@@ -18,10 +18,10 @@ const Book = (props) => {
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
-
+  const SERVER = process.env.NODE_ENV === 'development' ? 'https://book-store-wdrs.onrender.com/books/' : 'https://talkie-3.onrender.com/books/';
   const deleteHandler = async () => {
     try {
-      await axios.delete(`http://localhost:5000/books/${_id}`);
+      await axios.delete(`SERVER/${_id}`);
       history("/books");
     } catch (error) {
       console.error("Error deleting book:", error);

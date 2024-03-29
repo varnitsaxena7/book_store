@@ -9,7 +9,7 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
+const SERVER = process.env.NODE_ENV === 'development' ? 'http://localhost:5000/books/' : 'https://book-store-wdrs.onrender.com/books/';
 const BookDetail = () => {
   const [inputs, setInputs] = useState();
   const id = useParams().id;
@@ -18,7 +18,7 @@ const BookDetail = () => {
   useEffect(() => {
     const fetchHandler = async () => {
       await axios
-        .get(`http://localhost:5000/books/${id}`)
+        .get(`SERVER${id}`)
         .then((res) => res.data)
         .then((data) => setInputs(data.book));
     };
@@ -27,7 +27,7 @@ const BookDetail = () => {
 
   const sendRequest = async () => {
     await axios
-      .put(`http://localhost:5000/books/${id}`, {
+      .put(`SERVER${id}`, {
         name: String(inputs.name),
         author: String(inputs.author),
         description: String(inputs.description),

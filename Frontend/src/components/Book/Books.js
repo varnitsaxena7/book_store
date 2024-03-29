@@ -3,8 +3,7 @@ import axios from "axios";
 import Book from "./Book";
 import CircularProgress from '@mui/material/CircularProgress';
 
-const URL = "http://localhost:5000/books";
-
+const URL = process.env.NODE_ENV === 'development' ? 'http://localhost:5000/books' : 'https://book-store-wdrs.onrender.com/books';
 const Books = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);

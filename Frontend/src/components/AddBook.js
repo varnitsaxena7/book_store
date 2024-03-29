@@ -39,8 +39,8 @@ const AddBook = () => {
         setError("All fields are required.");
         return;
       }
-
-      await axios.post("http://localhost:5000/books", {
+      const SERVER = process.env.NODE_ENV === 'development' ? 'http://localhost:5000/books' : 'https://book-store-wdrs.onrender.com/books';
+      await axios.post(SERVER, {
         name: String(inputs.name),
         author: String(inputs.author),
         description: String(inputs.description),
