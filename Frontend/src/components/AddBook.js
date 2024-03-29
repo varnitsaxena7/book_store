@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Button,
   Checkbox,
@@ -8,8 +9,8 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 
 const AddBook = () => {
   const history = useNavigate();
@@ -18,52 +19,67 @@ const AddBook = () => {
     description: "",
     price: "",
     author: "",
-
     image: "",
   });
   const [checked, setChecked] = useState(false);
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
     setInputs((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
-    // console.log(e.target.name, "Value", e.target.value);
   };
 
-  const sendRequest = async () => {
-    await axios
-      .post("http://localhost:5000/books", {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      if (!inputs.name || !inputs.author || !inputs.description || !inputs.price || !inputs.image) {
+        setError("All fields are required.");
+        return;
+      }
+
+      await axios.post("http://localhost:5000/books", {
         name: String(inputs.name),
         author: String(inputs.author),
         description: String(inputs.description),
         price: Number(inputs.price),
         image: String(inputs.image),
         available: Boolean(checked),
-      })
-      .then((res) => res.data);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(inputs, checked);
-    sendRequest().then(() => history("/books"));
+      });
+      
+      history("/books");
+    } catch (error) {
+      console.error("Error adding book:", error);
+      setError("An error occurred while adding the book. Please try again later.");
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <Box
+        className="form-container"
         display="flex"
         flexDirection="column"
-        justifyContent={"center"}
+        alignItems="center"
         maxWidth={700}
-        alignContent={"center"}
-        alignSelf="center"
-        marginLeft={"auto"}
-        marginRight="auto"
-        marginTop={10}
+        mx="auto"
+        my={10}
+        p={5}
+        boxShadow={3}
+        borderRadius={8}
       >
-        <FormLabel>Name</FormLabel>
+        <Typography variant="h4" gutterBottom>
+          Add a New Book
+        </Typography>
+        {error && (
+          <Typography color="error" variant="body1" gutterBottom>
+            {error}
+          </Typography>
+        )}
         <TextField
+          label="Name"
           value={inputs.name}
           onChange={handleChange}
           margin="normal"
@@ -71,8 +87,8 @@ const AddBook = () => {
           variant="outlined"
           name="name"
         />
-        <FormLabel>Author</FormLabel>
         <TextField
+          label="Author"
           value={inputs.author}
           onChange={handleChange}
           margin="normal"
@@ -80,8 +96,8 @@ const AddBook = () => {
           variant="outlined"
           name="author"
         />
-        <FormLabel>Description</FormLabel>
         <TextField
+          label="Description"
           value={inputs.description}
           onChange={handleChange}
           margin="normal"
@@ -89,8 +105,8 @@ const AddBook = () => {
           variant="outlined"
           name="description"
         />
-        <FormLabel>Price</FormLabel>
         <TextField
+          label="Price"
           value={inputs.price}
           onChange={handleChange}
           type="number"
@@ -99,8 +115,8 @@ const AddBook = () => {
           variant="outlined"
           name="price"
         />
-        <FormLabel>Image</FormLabel>
         <TextField
+          label="Image URL"
           value={inputs.image}
           onChange={handleChange}
           margin="normal"
@@ -109,13 +125,10 @@ const AddBook = () => {
           name="image"
         />
         <FormControlLabel
-          control={
-            <Checkbox checked={checked} onChange={() => setChecked(!checked)} />
-          }
+          control={<Checkbox checked={checked} onChange={() => setChecked(!checked)} />}
           label="Available"
         />
-
-        <Button variant="contained" type="submit">
+        <Button variant="contained" type="submit" color="primary">
           Add Book
         </Button>
       </Box>
