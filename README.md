@@ -11,7 +11,7 @@ BookStore is a responsive web application offering a seamless and engaging exper
 - **Extensive Catalog:** Browse a vast collection of books across genres, authors, and categories.
 - **Search & Filter:** Easily find books with robust search and filter options.
 - **Book Reviews:** Read and write reviews to share and discover books based on community ratings.
-- **Personalized Recommendations:** Get book recommendations tailored to your reading history and preferences.
+- **Manage Books:** Add new books to the catalog and remove outdated ones.
 - **Responsive Design:** Enjoy BookStore on any device — desktop, tablet, or smartphone.
 
 ## Demo
